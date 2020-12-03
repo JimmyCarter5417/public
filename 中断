@@ -118,10 +118,15 @@ preempt_count
 进程上下文
 中断上下文
     #define in_interrupt() irq_count()
+    严格来说，并不是判断中断，而是判断是否会嵌套软硬中断
 原子上下文
     #define in_atomic()	(preempt_count() != 0)
-
-软中断可能处于中断上下文/进程上下文（ksoftirqd）
+    中断/软中断/持有自旋锁
+软中断上下
+    一是在下半部执行的软中断处理包括tasklet，irq_exit()->invoke_softirq()
+    二是内核线程中执行的软中断，比如中断线程/ksoftirqd内核线程
+    三是进程上下文中调用local_bh_enable()执行的软中断，local_bh_enable()->do_softirq()
+    一属于传统意义的中断上下文，二、三属于进程上下文
 
 抢占
     如果不主动释放CPU，在时间片用完或者高优先级任务就绪的情况下，会被强行剥夺掉CPU的使用权
