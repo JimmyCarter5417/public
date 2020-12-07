@@ -10,9 +10,11 @@ TODO
 | RCU | + |  |
 | 同步 | ++ | 内核态/用户态 |
 | 通信 | ++ | ICC/IPC/RPC/kernel<->user |
+| socket | ++ |  |
 | netfilter | ++++ | iptable/conntrack/nat/... |
 | SSL | [+++] | 原理/卸载框架/开源库 |
 | 问题分析 | +++++ | kernel_panic/rcu_stall/memleak/... |
 | 性能优化 | +++ | HFA/... |
 | DPDK | [+++++] |  |
 |  hyperscan | [++]  |
+| 防火墙框架 | [+++] | ipfwadm/ipchains/iptables/nftables/bpf |
