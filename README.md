@@ -10,7 +10,7 @@
 | netfilter | ++++ | iptable/conntrack/nat/... |
 | 问题分析 | +++++ | kernel_panic/rcu_stall/memleak/... |
 | 性能优化 | +++ | HFA/... |
-| 栈 | [+] |  |
+| [栈](https://github.com/wangqiang5417/misc/blob/main/%E6%A0%88.md) | [+] | MIPS32/MIP64/X86/X64 |
 | SSL | [++++] | 原理/卸载框架/开源库 |
 | DPDK | [+++++] |  |
 | hyperscan | [++]  |
