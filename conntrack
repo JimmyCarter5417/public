@@ -1,5 +1,10 @@
 http://blog.chinaunix.net/uid-26517122-id-4281305.html
 
+状态防火墙
+控制连接：master连接
+数据连接：期望连接
+
+
 netfilter内核参数proc位置
 /proc/sys/net/netfilter/
 
@@ -18,6 +23,7 @@ nf_conntrack_event_cache
 struct nf_conntrack_tuple
 
 每个网络命名空间有如下一个数据结构的实例，来管理和存放生成的连接的一些信息。
+```
 struct netns_ct 
 {
     struct hlist_nulls_head *hash;//存放已经经过确认的连接hash表
@@ -26,9 +32,10 @@ struct netns_ct
     struct hlist_nulls_head dying;
     struct ip_conntrack_stat *stat;
 };
+```
 
 一个连接包含正反两个方向的两条报文流。
-
+```
 struct nf_conn {
     //对连接的引用计数
     struct nf_conntrack ct_general;
@@ -47,15 +54,23 @@ struct nf_conn {
    //网络命名空间
     struct net *ct_net;
 };
+```
+* 入口：
+    * 第一次建立一个新的连接，创建正反向元组信息，并把该连接的正向连接挂到unconfirmed链表上
+    * 把该连接和报文进行关联，连接状态是NEW。
+* 出口：
+    * 把该连接的正向连接从unconfirmed链表上摘下来，把该连接的正反向连接加入到连接hash表中。并把该连接确认状态置为confirmed状态，即置位status的IPS_CONFIRMED_BIT位。
 
 每个struct nf_conn实例代表一个连接。每个skb都有一个指针，指向和它相关联的连接。
+```
 struct sk_buff 
 {
   struct nf_conntrack *nfct;//指向struct nf_conn实例
   nfctinfo:3; //记录报文的连接状态
 };
-
+```
 conntrack扩展
+```
 	struct nf_ct_ext 
 	{
 		struct rcu_head rcu;
@@ -83,6 +98,7 @@ conntrack扩展
 		u8 align;  //扩展功能私有数据的对齐字节
 		u8 alloc_size;
 	};
+```
 
 在conntrack的建立和处理过程中,给连接添加扩展功能
 nf_ct_ext_add(ct, id, gfp)
