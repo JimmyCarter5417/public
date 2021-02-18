@@ -44,6 +44,7 @@
 		* **初始状态**和**与初始状态直接相连的所有状态**，其fail指针都指向初始状态
 		* 从初始状态开始进行广度优先遍历（BFS），若当前状态S接受字符c直达的状态为T，则沿着S的fail指针回溯，直到找到第一个前驱状态F，使得F.goto(c)!=null。将T的fail指针设为F.goto(c)。简单来说，就是寻找状态S的存在于goto表中的最长后缀的状态F
 		* 将F的output添加到T的output中（状态5的he）
+
 		![](https://img-blog.csdnimg.cn/20200306163844494.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NoYW5neGluZ19K,size_16,color_FFFFFF,t_70)
 
 ------------
@@ -71,6 +72,7 @@
 			3. 好后缀不在模式串中，但是好后缀的后缀子串和模式串的前缀子串有重合部分，那么需要移动模式串至和好后缀的后缀子串重合的地方
 			![](https://image-static.segmentfault.com/322/196/3221961855-ad540b88f12e3eb3_articlex)
 	* 分别计算坏字符规则和好后缀规则往右滑动的位数，取最大值
+
 	![](https://img-blog.csdnimg.cn/20200417165619199.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0RCQ18xMjE=,size_16,color_FFFFFF,t_70#pic_center)
 	
 	* 计算坏字符数组bmBc[]
