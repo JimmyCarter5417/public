@@ -17,3 +17,4 @@
 | 防火墙框架 | [+++] | ipfwadm/ipchains/iptables/nftables/bpf |
 | SFE | [++] |  |
 | KFIFO | [+] |  |
+| 匹配算法 | ++ |  |
