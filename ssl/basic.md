@@ -28,9 +28,7 @@ TFO
   * 缺点：
     * TLS协议的一个扩展特性，目前的支持率不是很广泛
     * 需要维护一个全局的key来加解密，需要考虑key的安全性和部署
-![](https://st.imququ.com/i/webp/static/uploads/2015/11/tls-new-session-ticket.png.webp)
-![](https://st.imququ.com/i/webp/static/uploads/2015/11/tls-session-ticket.png.webp)
-![](https://img-blog.csdnimg.cn/20200421192447607.png)
+
 * session ID 和session ticket都在client hello中，则使用session ticket
 
 #### 证书验证
@@ -43,71 +41,17 @@ TFO
   * 服务端在发送完证书后，紧接着又发来了它的 OCSP 响应，从而避免了浏览器自己去验证证书造成阻塞
 ![](https://st.imququ.com/i/webp/static/uploads/2015/11/tls-ocsp-response.png.webp)
 
-<https://md.mzr.me/>
-
-#### ECC算法
-
-#### RSA
-
-![](https://cdn.jsdelivr.net/gh/xiaolincoder/ImageHost4@main/%E7%BD%91%E7%BB%9C/https/tls%E5%9B%9B%E6%AC%A1%E6%8F%A1%E6%89%8B.png)
-
-* 原理：给定两个素数p、q 很容易相乘得到n，而对n进行因式分解却相对困难
-* 公钥加密，私钥解密
-* 不支持前向保密：一旦服务端的私钥泄漏了，过去被第三方截获的所有 TLS 通讯密文都会被破解
-
-<https://blog.csdn.net/ttyy1112/article/details/107770123#RSA_5>
-
-#### DH
-
-![](https://cdn.jsdelivr.net/gh/xiaolincoder/ImageHost4@main/%E7%BD%91%E7%BB%9C/https/dh.png)
-![](https://cdn.jsdelivr.net/gh/xiaolincoder/ImageHost4@main/%E7%BD%91%E7%BB%9C/https/ech_tls%E6%8F%A1%E6%89%8B.png)
-
-* 原理：离散对数问题
-  * 算法参数:：模数p / 底数g，公开的
-  * 私钥：a / b
-  * 公钥：A / B
-![](https://cdn.jsdelivr.net/gh/xiaolincoder/ImageHost4@main/%E7%BD%91%E7%BB%9C/https/dh%E7%AE%97%E6%B3%95.png)
-* 协商步骤：
-  * 客户端先连上服务端
-  * 服务端生成一个随机数 s 作为自己的私钥，然后根据算法参数计算出公钥 S
-  * 服务端使用某种签名算法把“算法参数（模数p，基数g）和服务端公钥S”作为一个整体进行签名
-  * 服务端把“算法参数（模数p，基数g）、服务端公钥S、签名”发送给客户端
-  * 客户端收到后验证签名是否有效
-  * 客户端生成一个随机数 c 作为自己的私钥，然后根据算法参数计算出公钥 C
-  * 客户端把 C 发送给服务端
-  * 客户端和服务端（根据上述 DH 算法）各自计算出 k 作为会话密钥
-* 支持前向保密
-* 在 TLS 第四次握手前，客户端就已经发送了加密的 HTTP 数据，ECDHE 相比 RSA 握手过程省去了一个消息往返的时间，这个有点「抢跑」的意思，它被称为是「TLS False Start」，跟「TCP Fast Open」有点像，都是在还没连接完全建立前，就发送了应用数据，这样便提高了传输的效率。
-* 分类：
-  * DH 算法：
-    * 服务器私钥是静态的，客户端的私钥是随机的
-    * 于是，DH 交换密钥时就只有客户端的公钥是变化，而服务端公钥是不变的
-    * 不支持完美前向保密
-  * DHE 算法
-    * 双方私钥都是随机的
-  * ECDH 算法
-  * ECDHE 算法
-    * 椭圆曲线离散对数问题
-    * 确定好使用哪种椭圆曲线，和曲线上的基点 G，这两个参数都是公开的；
-    * 双方各自随机生成一个随机数作为私钥d，并与基点 G相乘得到公钥Q（Q = dG），此时小红的公私钥为 Q1 和 d1，小明的公私钥为 Q2 和 d2；
-    * 双方交换各自的公钥，最后小红计算点（x1，y1） = d1Q2，小明计算点（x2，y2） = d2Q1，由于椭圆曲线上是可以满足乘法交换和结合律，所以 d1Q2 = d1d2G = d2d1G = d2Q1 ，因此双方的 x 坐标是一样的，所以它是共享密钥，也就是会话密钥。
 
 #### RSA与DH区别
 
 * RSA 密钥协商算法「不支持」前向保密，ECDHE 密钥协商算法「支持」前向保密
 * 使用了 RSA 密钥协商算法，TLS 完成四次握手后，才能进行应用数据传输，而对于 ECDHE 算法，客户端可以不用等服务端的最后一次 TLS 握手，就可以提前发出加密的 HTTP 数据，节省了一个消息的往返时间
-* 使用 ECDHE， 在 TLS 第 2 次握手中，会出现服务器端发出的「Server Key Exchange」消息，而 RSA 握手过程没有该消息；
+
 
 #### 基础
 
 * X.509是一种数字证书的格式标准
 * 证书链： 根证书A - 中间证书B - 终端证书C
-* A/B为CA
-* key私钥
-* csr证书签名请求，这不是证书，可以简单理解成公钥，提交给CA生成证书
-* crt/cer证书
-  * PEM可读/DER不可读
-  * 签名/公钥/颁发者/。。。
 
 #### 握手
 
@@ -128,11 +72,6 @@ TFO
 
 <https://www.cnblogs.com/xiaolincoding/p/14318338.html>
 
-![](https://img-blog.csdnimg.cn/2020042119095762.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW55aXdw,size_16,color_FFFFFF,t_70)
-
-![](https://img-blog.csdnimg.cn/20200421192408350.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW55aXdw,size_16,color_FFFFFF,t_70)
-
-![](https://img-blog.csdnimg.cn/20200421192232478.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW55aXdw,size_16,color_FFFFFF,t_70)
 
 * ClientHello
   * Version
