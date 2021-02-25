@@ -161,9 +161,37 @@ https://www.cnblogs.com/thammer/p/7654925.html
                               session ticket
 ```
 
+* [重协商](https://blog.csdn.net/O4dC8OjO7ZL6/article/details/78537550)
+![](https://ss.csdn.net/p?http://mmbiz.qpic.cn/mmbiz_png/8rlpLIcBeicGPnyyLLuyZWLOJqYw1fappyrEMicaxNU7qRdGEic5cjAicrozEYe1mCRpHo4vWu52LyUmhn8ySNXbwg/640?wx_fmt=png&wxfrom=5&wx_lazy=1)
+  * 如果接收方不同意的话，都会通过SSL Alert响应以拒绝重协商。
+  * 安全重协商
+![](https://ss.csdn.net/p?https://mmbiz.qpic.cn/mmbiz_png/8rlpLIcBeicGPnyyLLuyZWLOJqYw1fappsoXoyZb2H1sK7Nic224iaQYw2zMs6DG11ImLkJD8JaTelKictk3icSaWew/0?wx_fmt=png)
+
 ***
 #### tls扩展
 
 * sni
 * session ticket
-* ocsp
+* status_request: ocsp
+* renegotiation_info
+***
+* HPKP
+  * HTTP Public-Key-Pins响应头
+  * 将特定的加密公钥与特定的服务器相关联(定义一组 Base64 编码的 SPKI 指纹)，以降低伪造证书对 MITM 攻击的风险。
+
+* HSTS
+  *  HTTP Strict-Transport-Security响应头
+  *  让浏览器得知，在接下来的一段时间内，当前域名只能通过 HTTPS 进行访问，并且在浏览器发现当前连接不安全的情况下，强制拒绝用户的后续访问要求。
+  *  HSTS Preload List：只要是在这个列表里的域名，无论何时、何种情况，浏览器都只使用 HTTPS 发起连接
+
+* Expect-CT(Certificate Transparency证书透明度) 
+  * 响应头
+  * 浏览器：验证该证书是否在CT的Log服务器中有记录，如果没有记录则给出安全警告。这就导致恶意网站必须将证书提交到Log Server上来规避浏览器的安全检查。
+  * 域名所有者：通过监控自己域名及时获得警报。如果发现Log Server上有另一个证书与自己的域名相同，能够快速做出反应。
+  * CA：由于签发的证书会有记录，因此给CA的自身监管带来了压力。
+
+* Alternate-Protocol
+  * 响应头，用于协商在未来的HTTP请求中使用QUIC/SPDY
+
+* Upgrade
+  * 请求头，浏览器想要升级到WebSocket/HTTP2
