@@ -27,9 +27,11 @@ https://www.cnblogs.com/thammer/p/7654925.html
 
 #### 算法原理
 * RSA
-  * 给定两个大素数p、q 容易相乘得到n，而对n进行因式分解却很困难
+  * 大整数因子分解问题
 * DH/ECDH
   * （椭圆曲线）离散对数问题
+* ECC
+  * 椭圆曲线问题
 ***
 #### CipherSuite加密套件
 
@@ -81,6 +83,10 @@ https://www.cnblogs.com/thammer/p/7654925.html
 
 > **非对称加密算法**RSA，也可以当作**密钥协商算法**来用  
 > RSA有两种模式，既可以当**非对称加密算法**使用，又可以当**非对称数字签名**使用
+
+> RSA 密钥交换、RSA 签名
+> ECDHE 密钥交换、RSA 签名
+> ECDHE 密钥交换、ECDSA 签名
 
 ***
 * 完整握手
@@ -174,6 +180,8 @@ https://www.cnblogs.com/thammer/p/7654925.html
 * session ticket
 * status_request: ocsp
 * renegotiation_info
+
+
 ***
 * HPKP
   * HTTP Public-Key-Pins响应头
@@ -195,3 +203,33 @@ https://www.cnblogs.com/thammer/p/7654925.html
 
 * Upgrade
   * 请求头，浏览器想要升级到WebSocket/HTTP2
+
+***
+访问http://www.baidu.com
+https://www.cnblogs.com/mylanguage/p/5635524.html
+
+![](http://ww2.sinaimg.cn/mw690/6941baebjw1ertfxnpeeej20hn062glz.jpg)
+![](http://ww4.sinaimg.cn/mw690/6941baebjw1ertfxndbb7j20gw0axwgl.jpg)
+
+***
+#### 证书
+
+内置 ECDSA 公钥的证书是 ECC 证书
+内置 RSA 公钥的证书是 RSA 证书
+
+* CN
+  * 在这里放置主要的域名（兼容性）
+  * *.google.com
+* SAN
+  * 扩展此证书支持的域名，使得一个证书可以支持多个不同域名
+
+***
+* SSL加速卡
+
+* SSL卸载
+  * 服务器负载均衡的一个增强功能
+
+***
+# todo
+
+* TLS 1.3
